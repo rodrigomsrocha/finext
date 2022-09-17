@@ -1,5 +1,5 @@
-import { Heading } from "@chakra-ui/react";
+import { SubscribePage } from "../components/SubscribePage";
 
 export default function Home() {
-  return <Heading>Finext</Heading>;
+  return <SubscribePage />;
 }
