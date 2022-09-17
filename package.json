@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.3.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@supabase/supabase-js": "^2.0.0-rc.10",
     "framer-motion": "^6",
     "next": "12.3.0",
     "phosphor-react": "^1.4.1",
