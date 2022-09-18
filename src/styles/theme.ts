@@ -7,9 +7,52 @@ export const theme = extendTheme({
         background: "gray.1000",
         color: "gray.10",
       },
+      table: {
+        width: "100%",
+        borderCollapse: "separate",
+        borderSpacing: "0 10px",
+        fontSize: "0.875rem",
+        overflow: "scroll",
+      },
+      thead: {
+        textAlign: "left",
+        color: "gray.300",
+        th: {
+          padding: "0.625rem 1.25rem",
+          fontWeight: "normal",
+        },
+      },
+      "td:first-child": { borderLeftRadius: "5px" },
+      "td:last-child": { borderRightRadius: "5px" },
+      td: {
+        background: "gray.900",
+        padding: "0.75rem 1.25rem",
+        color: "gray.200",
+      },
+      "td.title": {
+        color: "gray.10",
+      },
+      "td.gain": {
+        color: "utils.green.300",
+      },
+      "td.loss": {
+        color: "utils.red.300",
+      },
     },
   },
   colors: {
+    utils: {
+      green: {
+        100: "#e3ffde",
+        300: "#8DCC83",
+        500: "#15510a",
+      },
+      red: {
+        100: "#ffe0de",
+        300: "#BB7772",
+        500: "#6e2723",
+      },
+    },
     pink: {
       50: "#FFB9B9",
       100: "#FF9CA6",

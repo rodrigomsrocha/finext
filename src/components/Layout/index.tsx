@@ -8,7 +8,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <Container maxW="3xl" py="20">
+    <Container maxW="800px" py="20">
       <Header />
       {children}
     </Container>

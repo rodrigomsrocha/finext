@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
-import { GoogleLogo } from "phosphor-react";
+import { GoogleLogo, Plus } from "phosphor-react";
 import { useUserContext } from "../../contexts/UserContext";
 import { supabase } from "../../services/supabaseClient";
 
@@ -26,32 +26,49 @@ export function Header() {
     >
       <Text fontSize="4xl">Finext</Text>
       {session ? (
-        <Button
-          bg="gray.700"
-          color="gray.10"
-          px={2}
-          display="flex"
-          gap={2.5}
-          transition="0.2s"
-          onClick={() => supabase.auth.signOut()}
-          _hover={{
-            filter: "opacity(75%)",
-          }}
-        >
-          <Box
-            w={25}
-            h={25}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            background="gray.10"
-            borderRadius="3px"
-            overflow="hidden"
+        <Flex gap={5}>
+          <Button
+            leftIcon={<Plus />}
+            bg="pink.500"
+            py="2.5"
+            px="2"
+            transition="0.2s"
+            _hover={{
+              filter: "opacity(75%)",
+            }}
+            borderRadius="5px"
           >
-            <Image src={session.user.user_metadata.avatar_url} alt="Avatar" />
-          </Box>
-          {session.user.user_metadata.full_name}
-        </Button>
+            Nova transação
+          </Button>
+          <Button
+            bg="gray.700"
+            color="gray.10"
+            px={2}
+            display="flex"
+            gap={2.5}
+            transition="0.2s"
+            onClick={() => supabase.auth.signOut()}
+            _hover={{
+              filter: "opacity(75%)",
+            }}
+            borderRadius="5px"
+            title="sair"
+          >
+            <Box
+              w={25}
+              h={25}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              background="gray.10"
+              borderRadius="3px"
+              overflow="hidden"
+            >
+              <Image src={session.user.user_metadata.avatar_url} alt="Avatar" />
+            </Box>
+            {session.user.user_metadata.full_name}
+          </Button>
+        </Flex>
       ) : (
         <Button
           bg="gray.700"
