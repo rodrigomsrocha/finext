@@ -1,7 +1,10 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
 import { GoogleLogo } from "phosphor-react";
+import { useUserContext } from "../../contexts/UserContext";
+import { supabase } from "../../services/supabaseClient";
 
 export function Header() {
+  const { session, loginWithGoogle } = useUserContext();
   return (
     <Flex
       align="center"
@@ -22,30 +25,61 @@ export function Header() {
       }}
     >
       <Text fontSize="4xl">Finext</Text>
-      <Button
-        bg="gray.700"
-        color="gray.100"
-        px={2}
-        display="flex"
-        gap={2.5}
-        transition="0.2s"
-        _hover={{
-          filter: "opacity(75%)",
-        }}
-      >
-        <Box
-          w={25}
-          h={25}
+      {session ? (
+        <Button
+          bg="gray.700"
+          color="gray.10"
+          px={2}
           display="flex"
-          alignItems="center"
-          justifyContent="center"
-          background="gray.100"
-          borderRadius="3px"
+          gap={2.5}
+          transition="0.2s"
+          onClick={() => supabase.auth.signOut()}
+          _hover={{
+            filter: "opacity(75%)",
+          }}
         >
-          <GoogleLogo color="#3d3d3d" weight="fill" size={25} />
-        </Box>
-        Login com google
-      </Button>
+          <Box
+            w={25}
+            h={25}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            background="gray.10"
+            borderRadius="3px"
+            overflow="hidden"
+          >
+            <Image src={session.user.user_metadata.avatar_url} alt="Avatar" />
+          </Box>
+          {session.user.user_metadata.full_name}
+        </Button>
+      ) : (
+        <Button
+          bg="gray.700"
+          color="gray.10"
+          px={2}
+          display="flex"
+          gap={2.5}
+          transition="0.2s"
+          onClick={loginWithGoogle}
+          _hover={{
+            filter: "opacity(75%)",
+          }}
+        >
+          <Box
+            w={25}
+            h={25}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            background="gray.10"
+            borderRadius="3px"
+            overflow="hidden"
+          >
+            <GoogleLogo color="#3d3d3d" weight="fill" size={25} />
+          </Box>
+          Login com google
+        </Button>
+      )}
     </Flex>
   );
 }

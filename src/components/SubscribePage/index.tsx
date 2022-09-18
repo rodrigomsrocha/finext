@@ -1,6 +1,9 @@
 import { Flex, Link, Text } from "@chakra-ui/react";
+import { useUserContext } from "../../contexts/UserContext";
 
 export function SubscribePage() {
+  const { loginWithGoogle } = useUserContext();
+
   return (
     <Flex
       w="full"
@@ -13,7 +16,10 @@ export function SubscribePage() {
       align="center"
     >
       <Text fontSize="2xl" color="gray.700">
-        <Link color="pink.500">Crie sua conta</Link> e organize suas finanças
+        <Link color="pink.500" onClick={loginWithGoogle}>
+          Crie sua conta
+        </Link>{" "}
+        e organize suas finanças
       </Text>
     </Flex>
   );
