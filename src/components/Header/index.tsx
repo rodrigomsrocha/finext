@@ -1,30 +1,32 @@
 import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
 import { GoogleLogo, Plus } from "phosphor-react";
+import { useModalContext } from "../../contexts/ModalContext";
 import { useUserContext } from "../../contexts/UserContext";
 import { supabase } from "../../services/supabaseClient";
 
 export function Header() {
   const { session, loginWithGoogle } = useUserContext();
+  const { onOpen } = useModalContext();
+
   return (
-    <Flex
-      align="center"
-      justify="space-between"
-      pos="relative"
-      mb="24"
-      _before={{
-        content: '""',
-        display: "block",
-        width: "16px",
-        height: "16px",
-        borderRadius: "4px",
-        background: "pink.500",
-        position: "absolute",
-        zIndex: -1,
-        top: "10px",
-        left: "-4px",
-      }}
-    >
-      <Text fontSize="4xl">Finext</Text>
+    <Flex align="center" justify="space-between" pos="relative" mb="24">
+      <Text
+        _before={{
+          content: '""',
+          display: "block",
+          width: "16px",
+          height: "16px",
+          borderRadius: "4px",
+          background: "pink.500",
+          position: "absolute",
+          zIndex: -1,
+          top: "10px",
+          left: "-4px",
+        }}
+        fontSize="4xl"
+      >
+        Finext
+      </Text>
       {session ? (
         <Flex gap={5}>
           <Button
@@ -37,6 +39,7 @@ export function Header() {
               filter: "opacity(75%)",
             }}
             borderRadius="5px"
+            onClick={onOpen}
           >
             Nova transação
           </Button>

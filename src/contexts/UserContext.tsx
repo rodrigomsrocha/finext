@@ -1,5 +1,6 @@
 import { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { supabase } from "../services/supabaseClient";
 
 interface UserContextType {
@@ -18,7 +19,7 @@ export function UserContextProvider({ children }) {
       });
       if (error) throw error;
     } catch (error) {
-      alert(error.error_description || error.message);
+      toast.error(error.error_description || error.message);
     }
   }
 
