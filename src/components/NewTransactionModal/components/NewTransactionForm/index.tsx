@@ -1,7 +1,32 @@
 import { Button, Flex } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Minus, Plus } from "phosphor-react";
 import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import * as yup from "yup";
 import { FormInput } from "../FormInput";
+
+interface NewTransactionFormData {
+  title: string;
+  category: string;
+  value: string;
+}
+
+const newTransactionSchema = yup.object({
+  title: yup
+    .string()
+    .required("título é obrigatório")
+    .min(5, "5 caracteres no mínimo"),
+  category: yup
+    .string()
+    .required("categoria é obrigatória")
+    .min(5, "5 caracteres no mínimo")
+    .max(30, "30 caracteres no máximo"),
+  value: yup
+    .number()
+    .typeError("valor é obrigatório")
+    .min(1, "valor mínimo de R$1,00"),
+});
 
 export function NewTransactionForm() {
   const [transactionType, setTransactionType] = useState("entrance");
@@ -10,17 +35,39 @@ export function NewTransactionForm() {
     setTransactionType(transactionType);
   };
 
+  const createNewTransaction = (data: NewTransactionFormData) => {
+    console.table({ ...data, transactionType });
+  };
+
+  const newTrasnsactionForm = useForm<NewTransactionFormData>({
+    resolver: yupResolver(newTransactionSchema),
+  });
+  const { handleSubmit } = newTrasnsactionForm;
+
   return (
-    <form>
-      <FormInput
-        label="Título"
-        type="text"
-        placeholder="Portablidade salário"
-      />
-      <Flex gap={4} mt={4}>
-        <FormInput label="Categoria" type="text" placeholder="Trabalho" />
-        <FormInput label="Valor" type="number" placeholder="Valor" />
-      </Flex>
+    <form onSubmit={handleSubmit(createNewTransaction)}>
+      <FormProvider {...newTrasnsactionForm}>
+        <FormInput
+          label="Título"
+          type="text"
+          placeholder="Portablidade salário"
+          name="title"
+        />
+        <Flex gap={4} mt={4}>
+          <FormInput
+            label="Categoria"
+            type="text"
+            placeholder="Trabalho"
+            name="category"
+          />
+          <FormInput
+            label="Valor"
+            type="number"
+            placeholder="Valor"
+            name="value"
+          />
+        </Flex>
+      </FormProvider>
       <Flex gap={4} mt={6}>
         <Button
           w="full"
@@ -63,6 +110,9 @@ export function NewTransactionForm() {
           Saída
         </Button>
       </Flex>
+      <Button type="submit" w="full" colorScheme="pink" mt="6">
+        Criar transação
+      </Button>
     </form>
   );
 }

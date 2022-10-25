@@ -6,7 +6,7 @@ import { ModalContextProvider } from "../contexts/ModalContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import { theme } from "../styles/theme";
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider theme={theme}>
       <UserContextProvider>
@@ -21,5 +21,3 @@ function MyApp({ Component, pageProps }) {
     </ChakraProvider>
   );
 }
-
-export default MyApp;

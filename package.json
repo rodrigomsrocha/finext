@@ -12,13 +12,16 @@
     "@chakra-ui/react": "^2.3.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@hookform/resolvers": "^2.9.10",
     "@supabase/supabase-js": "^2.0.0-rc.10",
     "framer-motion": "^6",
     "next": "12.3.0",
     "phosphor-react": "^1.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hot-toast": "^2.4.0"
+    "react-hook-form": "^7.38.0",
+    "react-hot-toast": "^2.4.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.7.17",

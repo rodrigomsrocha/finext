@@ -1,9 +1,7 @@
 import {
-  Button,
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
@@ -40,15 +38,9 @@ export function NewTransactionModal() {
             Adicionar nova transação
           </Text>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody pb="5">
           <NewTransactionForm />
         </ModalBody>
-
-        <ModalFooter w="full">
-          <Button w="full" colorScheme="pink">
-            Criar transação
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );
