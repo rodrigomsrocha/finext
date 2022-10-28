@@ -4,12 +4,14 @@ import { Minus, Plus } from "phosphor-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { useModalContext } from "../../../../contexts/ModalContext";
+import { useUserContext } from "../../../../contexts/UserContext";
 import { FormInput } from "../FormInput";
 
 interface NewTransactionFormData {
   title: string;
   category: string;
-  value: string;
+  value: number;
 }
 
 const newTransactionSchema = yup.object({
@@ -29,14 +31,19 @@ const newTransactionSchema = yup.object({
 });
 
 export function NewTransactionForm() {
-  const [transactionType, setTransactionType] = useState("entrance");
+  const { createTransaction } = useUserContext();
+  const { onClose } = useModalContext();
+  const [transactionType, setTransactionType] = useState<"entrance" | "exit">(
+    "entrance"
+  );
 
   const changeTransactionType = (transactionType: "entrance" | "exit") => {
     setTransactionType(transactionType);
   };
 
   const createNewTransaction = (data: NewTransactionFormData) => {
-    console.table({ ...data, transactionType });
+    createTransaction({ ...data, type: transactionType });
+    onClose();
   };
 
   const newTrasnsactionForm = useForm<NewTransactionFormData>({

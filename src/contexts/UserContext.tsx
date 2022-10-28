@@ -3,9 +3,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../services/supabaseClient";
 
+type NewTransactionData = {
+  title: string;
+  category: string;
+  value: number;
+  type: "entrance" | "exit";
+};
+
 interface UserContextType {
   session: Session;
   loginWithGoogle: () => Promise<void>;
+  createTransaction: (data: NewTransactionData) => void;
 }
 const UserContext = createContext({} as UserContextType);
 
@@ -20,6 +28,23 @@ export function UserContextProvider({ children }) {
       if (error) throw error;
     } catch (error) {
       toast.error(error.error_description || error.message);
+    }
+  }
+
+  async function createTransaction(data: NewTransactionData) {
+    if (!session) {
+      toast.error("Você precisa estar logado");
+      return;
+    }
+
+    try {
+      await supabase
+        .from("transactions")
+        .insert({ ...data, user_id: session.user.id });
+
+      toast.success("Transação criada!!!");
+    } catch (error) {
+      toast.error("Alguma coisa deu errado");
     }
   }
 
@@ -52,7 +77,9 @@ export function UserContextProvider({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ session, loginWithGoogle }}>
+    <UserContext.Provider
+      value={{ session, loginWithGoogle, createTransaction }}
+    >
       {children}
     </UserContext.Provider>
   );
