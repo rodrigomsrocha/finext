@@ -1,4 +1,3 @@
-import { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../services/supabaseClient";
@@ -11,7 +10,6 @@ type NewTransactionData = {
 };
 
 interface UserContextType {
-  session: Session;
   loginWithGoogle: () => Promise<void>;
   createTransaction: (data: NewTransactionData) => void;
 }
@@ -77,9 +75,7 @@ export function UserContextProvider({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{ session, loginWithGoogle, createTransaction }}
-    >
+    <UserContext.Provider value={{ loginWithGoogle, createTransaction }}>
       {children}
     </UserContext.Provider>
   );

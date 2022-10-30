@@ -1,10 +1,14 @@
-import { HomePage } from "../components/HomePage";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 import { SubscribePage } from "../components/SubscribePage";
-import { useUserContext } from "../contexts/UserContext";
 
-export default function Home() {
-  const { session } = useUserContext();
+export default function SignUp() {
+  const user = useUser();
+  const router = useRouter();
 
-  if (session) return <HomePage />;
+  if (user) {
+    router.push("/transactions");
+  }
+
   return <SubscribePage />;
 }

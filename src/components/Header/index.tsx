@@ -1,12 +1,16 @@
 import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 import { GoogleLogo, Plus } from "phosphor-react";
 import { useModalContext } from "../../contexts/ModalContext";
 import { useUserContext } from "../../contexts/UserContext";
-import { supabase } from "../../services/supabaseClient";
 
 export function Header() {
-  const { session, loginWithGoogle } = useUserContext();
+  const { loginWithGoogle } = useUserContext();
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
   const { onOpen } = useModalContext();
+  const router = useRouter();
 
   return (
     <Flex align="center" justify="space-between" pos="relative" mb="24">
@@ -27,7 +31,7 @@ export function Header() {
       >
         Finext
       </Text>
-      {session ? (
+      {user ? (
         <Flex gap={5}>
           <Button
             leftIcon={<Plus />}
@@ -50,7 +54,10 @@ export function Header() {
             display="flex"
             gap={2.5}
             transition="0.2s"
-            onClick={() => supabase.auth.signOut()}
+            onClick={async () => {
+              await supabaseClient.auth.signOut();
+              router.push("/");
+            }}
             _hover={{
               filter: "opacity(75%)",
             }}
@@ -67,9 +74,9 @@ export function Header() {
               borderRadius="3px"
               overflow="hidden"
             >
-              <Image src={session.user.user_metadata.avatar_url} alt="Avatar" />
+              <Image src={user.user_metadata.avatar_url} alt="Avatar" />
             </Box>
-            {session.user.user_metadata.full_name}
+            {user.user_metadata.full_name}
           </Button>
         </Flex>
       ) : (
