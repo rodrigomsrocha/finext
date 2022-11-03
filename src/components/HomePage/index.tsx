@@ -2,6 +2,16 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { CurrencyDollarSimple, Minus, Plus } from "phosphor-react";
 import { TransactionsTable } from "./components/TransactionsTable";
 
+type Transaction = {
+  id: number;
+  created_at: string;
+  title: string;
+  category: string;
+  value: number;
+  type: "entrance" | "exit";
+  user_id: "string";
+};
+
 export function HomePage() {
   return (
     <Box
@@ -38,7 +48,7 @@ export function HomePage() {
         </Box>
         <Box flex="1" h="100px" bg="gray.900" borderRadius="5px" p="2.5">
           <Flex justify="space-between" align="center" mb="2">
-            <Text color="gray.100">Ganhos</Text>
+            <Text color="gray.100">Total</Text>
             <Box bg="pink.500" p="4px" borderRadius={5} fontWeight="medium">
               <CurrencyDollarSimple size={10} color="#f5f5f5" weight="bold" />
             </Box>

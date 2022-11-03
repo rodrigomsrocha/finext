@@ -1,6 +1,18 @@
 import { TableContainer } from "@chakra-ui/react";
+import { useUserContext } from "../../../../contexts/UserContext";
+
+type Transaction = {
+  id: number;
+  created_at: string;
+  title: string;
+  category: string;
+  value: string;
+  type: "entrance" | "exit";
+  user_id: "string";
+};
 
 export function TransactionsTable() {
+  const { transactions } = useUserContext();
   return (
     <TableContainer
       maxH="300px"
@@ -29,42 +41,16 @@ export function TransactionsTable() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="title">Portabilidade salário</td>
-            <td className="gain">R$ 2.000,00</td>
-            <td>Trabalho</td>
-            <td>13/09/2022</td>
-          </tr>
-          <tr>
-            <td className="title">Portabilidade salário</td>
-            <td className="loss">R$ 2.000,00</td>
-            <td>Trabalho</td>
-            <td>13/09/2022</td>
-          </tr>
-          <tr>
-            <td className="title">Portabilidade salário</td>
-            <td className="loss">R$ 2.000,00</td>
-            <td>Trabalho</td>
-            <td>13/09/2022</td>
-          </tr>
-          <tr>
-            <td className="title">Portabilidade salário</td>
-            <td className="loss">R$ 2.000,00</td>
-            <td>Trabalho</td>
-            <td>13/09/2022</td>
-          </tr>
-          <tr>
-            <td className="title">Portabilidade salário</td>
-            <td className="loss">R$ 2.000,00</td>
-            <td>Trabalho</td>
-            <td>13/09/2022</td>
-          </tr>
-          <tr>
-            <td className="title">Portabilidade salário</td>
-            <td className="loss">R$ 2.000,00</td>
-            <td>Trabalho</td>
-            <td>13/09/2022</td>
-          </tr>
+          {transactions.map((transaction) => (
+            <tr key={transaction.id}>
+              <td className="title">{transaction.title}</td>
+              <td className={transaction.type === "entrance" ? "gain" : "loss"}>
+                {transaction.value}
+              </td>
+              <td>{transaction.category}</td>
+              <td>{transaction.created_at}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </TableContainer>

@@ -2,6 +2,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../services/supabaseClient";
 
+type Transaction = {
+  id: number;
+  created_at: string;
+  title: string;
+  category: string;
+  value: string;
+  type: "entrance" | "exit";
+  user_id: "string";
+};
+
 type NewTransactionData = {
   title: string;
   category: string;
@@ -12,11 +22,15 @@ type NewTransactionData = {
 interface UserContextType {
   loginWithGoogle: () => Promise<void>;
   createTransaction: (data: NewTransactionData) => void;
+  getTransactions: (transactions: Transaction[]) => void;
+  setInitialTransactions: (transactions: Transaction[]) => void;
+  transactions: Transaction[];
 }
 const UserContext = createContext({} as UserContextType);
 
 export function UserContextProvider({ children }) {
   const [session, setSession] = useState(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   async function loginWithGoogle() {
     try {
@@ -40,10 +54,25 @@ export function UserContextProvider({ children }) {
         .from("transactions")
         .insert({ ...data, user_id: session.user.id });
 
+      getTransactions();
       toast.success("Transação criada!!!");
     } catch (error) {
       toast.error("Alguma coisa deu errado");
     }
+  }
+
+  async function getTransactions() {
+    const { data, error } = await supabase
+      .from("transactions")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .order("created_at", { ascending: false });
+    if (data) setTransactions(data);
+    if (error) throw error;
+  }
+
+  function setInitialTransactions(transactions: Transaction[]) {
+    setTransactions(transactions);
   }
 
   useEffect(() => {
@@ -75,7 +104,15 @@ export function UserContextProvider({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ loginWithGoogle, createTransaction }}>
+    <UserContext.Provider
+      value={{
+        loginWithGoogle,
+        createTransaction,
+        getTransactions,
+        transactions,
+        setInitialTransactions,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
