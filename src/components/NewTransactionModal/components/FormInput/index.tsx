@@ -33,6 +33,7 @@ export function FormInput({ label, type, placeholder, name }: InputTypeProps) {
         type={type}
         {...register(name)}
         min={1}
+        step="any"
       />
       <Text fontSize="sm" color="utils.red.300">
         <>{errors[name]?.message}</>
