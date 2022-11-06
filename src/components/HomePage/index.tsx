@@ -1,18 +1,28 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { CurrencyDollarSimple, Minus, Plus } from "phosphor-react";
+import { useUserContext } from "../../contexts/UserContext";
 import { TransactionsTable } from "./components/TransactionsTable";
 
-type Transaction = {
-  id: number;
-  created_at: string;
-  title: string;
-  category: string;
-  value: number;
-  type: "entrance" | "exit";
-  user_id: "string";
-};
-
 export function HomePage() {
+  const { transactions } = useUserContext();
+  const summary = transactions.reduce(
+    (acc, transaction) => {
+      if (transaction.type === "entrance") {
+        acc.gain += transaction.value;
+        acc.total += transaction.value;
+      } else {
+        acc.loss += transaction.value;
+        acc.total -= transaction.value;
+      }
+      return acc;
+    },
+    {
+      gain: 0,
+      loss: 0,
+      total: 0,
+    }
+  );
+
   return (
     <Box
       background="gray.700"
@@ -32,7 +42,11 @@ export function HomePage() {
             </Box>
           </Flex>
           <Heading fontSize="2xl" color="gray.1000">
-            -R$ 1.523,76
+            -
+            {new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(summary.loss)}
           </Heading>
         </Box>
         <Box flex="1" h="100px" bg="gray.200" borderRadius="5px" p="2.5">
@@ -43,7 +57,10 @@ export function HomePage() {
             </Box>
           </Flex>
           <Heading fontSize="2xl" color="gray.1000">
-            R$ 2.000,00
+            {new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(summary.gain)}
           </Heading>
         </Box>
         <Box flex="1" h="100px" bg="gray.900" borderRadius="5px" p="2.5">
@@ -54,7 +71,10 @@ export function HomePage() {
             </Box>
           </Flex>
           <Heading fontSize="2xl" color="gray.10">
-            R$ 2.000,00
+            {new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(summary.total)}
           </Heading>
         </Box>
       </Flex>

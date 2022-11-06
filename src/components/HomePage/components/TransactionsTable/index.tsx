@@ -45,7 +45,7 @@ export function TransactionsTable() {
             <tr key={transaction.id}>
               <td className="title">{transaction.title}</td>
               <td className={transaction.type === "entrance" ? "gain" : "loss"}>
-                {transaction.value}
+                {transaction.formatted_value}
               </td>
               <td>{transaction.category}</td>
               <td>{transaction.created_at}</td>

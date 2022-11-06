@@ -7,7 +7,8 @@ type Transaction = {
   created_at: string;
   title: string;
   category: string;
-  value: string;
+  value: number;
+  formatted_value: string;
   type: "entrance" | "exit";
   user_id: "string";
 };
@@ -20,11 +21,10 @@ type NewTransactionData = {
 };
 
 interface UserContextType {
+  transactions: Transaction[];
   loginWithGoogle: () => Promise<void>;
   createTransaction: (data: NewTransactionData) => void;
-  getTransactions: (transactions: Transaction[]) => void;
-  setInitialTransactions: (transactions: Transaction[]) => void;
-  transactions: Transaction[];
+  getTransactions: () => void;
 }
 const UserContext = createContext({} as UserContextType);
 
@@ -54,10 +54,11 @@ export function UserContextProvider({ children }) {
         .from("transactions")
         .insert({ ...data, user_id: session.user.id });
 
-      getTransactions();
+      await getTransactions();
       toast.success("Transação criada!!!");
     } catch (error) {
       toast.error("Alguma coisa deu errado");
+    } finally {
     }
   }
 
@@ -65,14 +66,24 @@ export function UserContextProvider({ children }) {
     const { data, error } = await supabase
       .from("transactions")
       .select("*")
-      .eq("user_id", session.user.id)
+      .eq("user_id", session?.user.id)
       .order("created_at", { ascending: false });
-    if (data) setTransactions(data);
-    if (error) throw error;
-  }
 
-  function setInitialTransactions(transactions: Transaction[]) {
-    setTransactions(transactions);
+    const transactions = data?.map((transaction) => {
+      return {
+        ...transaction,
+        formatted_value: new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(transaction.value),
+        created_at: new Intl.DateTimeFormat("pt-BR").format(
+          new Date(transaction.created_at)
+        ),
+      };
+    });
+
+    if (error) throw error;
+    if (data) setTransactions(transactions);
   }
 
   useEffect(() => {
@@ -110,7 +121,6 @@ export function UserContextProvider({ children }) {
         createTransaction,
         getTransactions,
         transactions,
-        setInitialTransactions,
       }}
     >
       {children}
